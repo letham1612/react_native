@@ -1,12 +1,16 @@
-import { View, Text } from 'react-native'
-import React from 'react'
+import { Text, SafeAreaView } from "react-native";
+import React from "react";
+import { useTranslation } from "react-i18next";
 
 const SignIn = () => {
-  return (
-    <View>
-      <Text>SignIn</Text>
-    </View>
-  )
-}
+  const { t } = useTranslation();
 
-export default SignIn
+  return (
+    <SafeAreaView>
+      <Text>{t("welcome")}</Text>
+    </SafeAreaView>
+  );
+};
+
+export default SignIn;  
+

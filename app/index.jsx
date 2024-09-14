@@ -1,26 +1,18 @@
-import { Link } from "expo-router";
-import { StatusBar } from "expo-status-bar";
-import { SafeAreaView, Text, View } from "react-native";
-import { useEffect } from "react";
-import NetInfo from "@react-native-community/netinfo";
+import 'intl-pluralrules'; 
+import React from 'react';
+import { StatusBar } from 'expo-status-bar';
+import { SafeAreaView } from 'react-native';
+import { I18nextProvider } from 'react-i18next';
+import i18n from '../i18n'; 
 import Onboarding from "@/components/Onboarding";
 
 export default function App() {
-  useEffect(() => {
-    const unsubscribe = NetInfo.addEventListener((state) => {
-      if (!state.isConnected) {
-        alert("Mất kết nối mạng. Vui lòng kiểm tra lại.");
-      }
-    });
-
-    return () => {
-      unsubscribe();
-    };
-  }, []);
-
   return (
-    <SafeAreaView>
-      <Onboarding />
-    </SafeAreaView>
+    <I18nextProvider i18n={i18n}>
+      <SafeAreaView>
+        <StatusBar style="dark" />
+        <Onboarding />
+      </SafeAreaView>
+    </I18nextProvider>
   );
 }
