@@ -1,11 +1,21 @@
-import { Animated, FlatList, View } from "react-native";
+import {
+  Animated,
+  FlatList,
+  SafeAreaView,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import React, { useRef, useState } from "react";
 import { OnboardingContent } from "@/constants/contents";
 import OnboardingItem from "./OnboardingItem";
 import Paginator from "./Paginator";
 import { StatusBar } from "expo-status-bar";
 
+import {  useRouter } from "expo-router";
+
 export default function Onboarding() {
+  const router = useRouter();
   const slideRef = useRef<FlatList<any>>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const scrollX = useRef(new Animated.Value(0)).current;
@@ -25,9 +35,9 @@ export default function Onboarding() {
   const viewConfig = useRef({ viewAreaCoveragePercentThreshold: 50 }).current;
 
   return (
-    <View className="flex justify-center">
-      <StatusBar style="dark"/>
-      <View className=" flex-3">
+    <SafeAreaView>
+      <StatusBar style="dark" />
+      <View className="h-[80vh]">
         <FlatList
           data={OnboardingContent}
           renderItem={({ item }) => <OnboardingItem item={item} />}
@@ -49,7 +59,21 @@ export default function Onboarding() {
           scrollEventThrottle={32}
         />
       </View>
-      <Paginator data={OnboardingContent} scrollX={scrollX} />
-    </View>
+      <View className="h-[5vh] justify-center">
+        <Paginator data={OnboardingContent} scrollX={scrollX} />
+      </View>
+      <View className="h-[8vh] items-center justify-center flex">
+        {currentIndex == OnboardingContent.length - 1 && (
+          <TouchableOpacity
+            className="bg-blue-500 justify-center items-center py-3 px-8 rounded-full"
+            onPress={() => router.push('/sign-in' )}
+          >
+            <Text className="text-white text-center text-lg font-bold">
+              Start
+            </Text>
+          </TouchableOpacity>
+        )}
+      </View>
+    </SafeAreaView>
   );
 }
