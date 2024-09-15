@@ -28,19 +28,19 @@ const Home = () => {
       id: 1,
       name: "Good Source Chocolates",
       price: "$08.00",
-      image: images.cards,
+      image: images.cafe1,
     },
     {
       id: 2,
       name: "Best Coffee",
       price: "$05.00",
-      image: images.cards,
+      image: images.cafe2,
     },
     {
       id: 3,
       name: "Fresh Fruits",
       price: "$10.00",
-      image: images.cards,
+      image: images.cafe3,
     },
   ]);
 
