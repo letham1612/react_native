@@ -7,7 +7,7 @@ import {
   View,
 } from "react-native";
 import React, { useRef, useState } from "react";
-import { OnboardingContent } from "@/constants/contents";
+import { OnboardingContent } from "@/constants/data";
 import OnboardingItem from "./OnboardingItem";
 import Paginator from "./Paginator";
 import { StatusBar } from "expo-status-bar";
@@ -66,7 +66,7 @@ export default function Onboarding() {
         {currentIndex == OnboardingContent.length - 1 && (
           <TouchableOpacity
             className="bg-blue-500 justify-center items-center py-3 px-8 rounded-full"
-            onPress={() => router.push('/sign-in' )}
+            onPress={() => router.push('/home' )}
           >
             <Text className="text-white text-center text-lg font-bold">
               Start
