@@ -66,7 +66,7 @@ export default function Onboarding() {
         {currentIndex == OnboardingContent.length - 1 && (
           <TouchableOpacity
             className="bg-blue-500 justify-center items-center py-3 px-8 rounded-full"
-            onPress={() => router.push('/profile' )}
+            onPress={() => router.push('/sign-in' )}
           >
             <Text className="text-white text-center text-lg font-bold">
               Start
