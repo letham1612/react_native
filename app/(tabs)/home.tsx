@@ -12,6 +12,7 @@ import { icons, images } from "@/constants";
 import { Colors } from "@/constants/Colors";
 import { Categories } from "@/constants/data";
 import Swiper from "react-native-deck-swiper";
+import { router } from "expo-router";
 
 type CategoryType = {
   id: number;
@@ -169,7 +170,13 @@ const Home = () => {
           <View>
             <Swiper
               cards={products}
+              onTapCard={
+                () => router.push("/list-item")
+              }
               renderCard={(product: any) => (
+
+                
+
                 <View className="bg-slate-200 rounded-3xl p-5 h-1/2  ">
                   <Text className="text-lg font-bold">{product.name}</Text>
                   <Text className="text-gray-500 mb-2">{product.name}</Text>
