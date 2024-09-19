@@ -1,3 +1,4 @@
+import { router } from "expo-router";
 import React, { useState, useRef } from "react";
 import {
   View,
@@ -36,11 +37,11 @@ const Otp = () => {
 
   return (
     <SafeAreaView
-      className=" bg-white flex-1"
-      style={{
-        paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
-      }}
-    >
+        className=" bg-white flex-1"
+        style={{
+          paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
+        }}
+      >
       <View className="flex justify-between bg-slate-200">
         <Text className="text-2xl font-bold text-center mb-3">
           Xác nhận Mã OTP
@@ -48,7 +49,11 @@ const Otp = () => {
 
         <Text className="text-center text-base text-black mb-12">
           Mã xác thực gồm 5 số đã được gửi đến Zalo hoặc số điện thoại
+          <TouchableOpacity
+                onPress={() => router.push("/home")}
+              >
           <Text className="text-blue-500"> 09999999</Text>
+          </TouchableOpacity>
         </Text>
 
         <Text className="text-center text-base text-black mb-2">
