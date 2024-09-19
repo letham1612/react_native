@@ -12,6 +12,7 @@ const TabLayout = () => {
         name="list-item"
         options={{ headerShown: false }}
       ></Stack.Screen>
+      <Stack.Screen name="profile" options={{ headerShown: false }}></Stack.Screen>
     </Stack>
   );
 };
