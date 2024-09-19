@@ -8,6 +8,10 @@ const TabLayout = () => {
         name="home"
         options={{ headerShown: false }}
       ></Stack.Screen>
+      <Stack.Screen
+        name="list-item"
+        options={{ headerShown: false }}
+      ></Stack.Screen>
     </Stack>
   );
 };
