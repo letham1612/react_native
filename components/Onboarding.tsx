@@ -1,18 +1,19 @@
 import {
   Animated,
   FlatList,
+  Platform,
   SafeAreaView,
   Text,
   TouchableOpacity,
+  StatusBar,
   View,
 } from "react-native";
 import React, { useRef, useState } from "react";
 import { OnboardingContent } from "@/constants/data";
 import OnboardingItem from "./OnboardingItem";
 import Paginator from "./Paginator";
-import { StatusBar } from "expo-status-bar";
 
-import {  useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 
 export default function Onboarding() {
   const router = useRouter();
@@ -35,9 +36,13 @@ export default function Onboarding() {
   const viewConfig = useRef({ viewAreaCoveragePercentThreshold: 50 }).current;
 
   return (
-    <SafeAreaView>
-      <StatusBar style="dark" />
-      <View className="h-[80vh]">
+    <SafeAreaView
+      className=" flex-1 bg-white "
+      style={{
+        paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
+      }}
+    >
+      <View className=" h-[87%] ">
         <FlatList
           data={OnboardingContent}
           renderItem={({ item }) => <OnboardingItem item={item} />}
@@ -59,20 +64,22 @@ export default function Onboarding() {
           scrollEventThrottle={32}
         />
       </View>
-      <View className="h-[5vh] justify-center">
-        <Paginator data={OnboardingContent} scrollX={scrollX} />
-      </View>
-      <View className="h-[8vh] items-center justify-center flex">
-        {currentIndex == OnboardingContent.length - 1 && (
-          <TouchableOpacity
-            className="bg-blue-500 justify-center items-center py-3 px-8 rounded-full"
-            onPress={() => router.push('/sign-in' )}
-          >
-            <Text className="text-white text-center text-lg font-bold">
-              Start
-            </Text>
-          </TouchableOpacity>
-        )}
+      <View className=" flex-1">
+        <View className="h-1/3 justify-center">
+          <Paginator data={OnboardingContent} scrollX={scrollX} />
+        </View>
+        <View className="h-2/3  items-center justify-center flex">
+          {currentIndex == OnboardingContent.length - 1 && (
+            <TouchableOpacity
+              className="bg-blue-500 justify-center items-center py-3 px-8 rounded-full"
+              onPress={() => router.push("/sign-in")}
+            >
+              <Text className="text-white text-center text-lg font-bold">
+                Start
+              </Text>
+            </TouchableOpacity>
+          )}
+        </View>
       </View>
     </SafeAreaView>
   );

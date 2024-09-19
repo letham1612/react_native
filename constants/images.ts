@@ -5,6 +5,7 @@ import path from "../assets/images/path.png";
 import logo from "../assets/images/logo.png";
 import logoSmall from "../assets/images/logo-small.png";
 import empty from "../assets/images/empty.png";
+import login from "../assets/images/login.png";
 import cafe1 from "../assets/images/cafe1.png";
 import cafe2 from "../assets/images/cafe2.png";
 import cafe3 from "../assets/images/cafe3.png";
@@ -24,4 +25,5 @@ export default {
   cafe3,
   cafe4,
   cafe5,
+  login,
 };

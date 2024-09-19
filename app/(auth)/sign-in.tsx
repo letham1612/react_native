@@ -1,137 +1,84 @@
-import React from 'react';
-import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet } from 'react-native';
-import { SocialIcon } from 'react-native-elements';
+import { router } from "expo-router";
+import React from "react";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  SafeAreaView,
+  Keyboard,
+  TouchableWithoutFeedback,
+  Image,
+  Platform,
+  StatusBar,
+} from "react-native";
 
-const LoginScreen = () => {
+const SignIn = () => {
   return (
-    <View style={styles.container}>
-      {/* Phần hình ảnh background */}
-      <Image 
-        source={require('../../assets/images/img_login.jpg')}  // Sử dụng require() để thêm ảnh
-        style={styles.backgroundImage} 
-      />
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <SafeAreaView
+        className="flex-1 bg-white justify-start"
+        style={{
+          paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
+        }}
+      >
+        <View className="p-5 flex-1 items-center h-fulw-full">
+          <View className="w-full items-center flex-1">
+            <View className="flex-1 justify-center items-center">
+              <Text className="text-xl text-black mb-2">
+                Chào mừng bạn đến với
+              </Text>
+              <Text className="text-3xl font-bold text-black mb-5">
+                PHUC LONG
+              </Text>
+            </View>
+            <View className="w-full flex-1">
+              <View className=" flex-row items-center border py-4 mb-2 px-2 rounded-md border-gray-300 ">
+                <View className=" border-r border-gray-300 mr-2">
+                  <Text style={{ fontSize: 16 }}>🇻🇳 +84 </Text>
+                </View>
+                <TextInput
+                  style={{
+                    fontSize: 16,
+                    flex: 1,
+                    paddingVertical: 0,
+                  }}
+                  placeholder="Enter your phone number"
+                  keyboardType="phone-pad"
+                />
+              </View>
+              <TouchableOpacity
+                onPress={() => router.push("/otp")}
+                className="bg-gray-300 py-4 rounded-md items-center w-full mb-5"
+              >
+                <Text className="text-base text-black">Đăng nhập</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
 
-      <View style={styles.formContainer}>
-        <Text style={styles.welcomeText}>Chào mừng bạn đến với</Text>
-        <Text style={styles.titleText}>THE PHUC LONG</Text>
-
-        <View style={styles.phoneInputContainer}>
-          <Text style={styles.countryCode}>+84</Text>
-          <TextInput 
-            style={styles.phoneInput} 
-            placeholder="Nhập số điện thoại"
-            keyboardType="phone-pad"
-          />
+          <View className="w-full items-center">
+            <Text className="text-sm my-3 text-gray-500">HOẶC</Text>
+            <TouchableOpacity className="w-full bg-blue-400 py-4 rounded-md mb-3 items-center">
+              <Text className="text-base text-white">
+                Tiếp tục bằng Twitter
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity className="w-full bg-blue-600 py-4 rounded-md mb-3 items-center">
+              <Text className="text-base text-white">
+                Tiếp tục bằng Facebook
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity className="w-full bg-red-500 py-4 rounded-md mb-3 items-center">
+              <Text className="text-base text-white">Tiếp tục bằng Google</Text>
+            </TouchableOpacity>
+            <TouchableOpacity className="mt-5">
+              <Text className="text-sm text-gray-500">Tiếng Việt</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-
-        <TouchableOpacity style={styles.loginButton}>
-          <Text style={styles.loginButtonText}>Đăng nhập</Text>
-        </TouchableOpacity>
-
-        <Text style={styles.orText}>HOẶC</Text>
-
-        <SocialIcon
-          title="Tiếp tục bằng Twitter"
-          button
-          type="twitter"
-          style={styles.socialButton}
-          
-        />
-        <SocialIcon
-          title="Tiếp tục bằng Facebook"
-          button
-          type="facebook"
-          style={styles.socialButton}
-        />
-        <SocialIcon
-          title="Tiếp tục bằng Google"
-          button
-          type="google"
-          style={styles.socialButton}
-        />
-
-        <TouchableOpacity style={styles.languageSelector}>
-          <Text style={styles.languageText}>Tiếng Việt</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
+      </SafeAreaView>
+    </TouchableWithoutFeedback>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    justifyContent: 'flex-start',
-  },
-  backgroundImage: {
-    width: '100%',
-    height: '35%', // Tùy chỉnh theo hình ảnh của bạn
-    resizeMode: 'cover',
-  },
-  formContainer: {
-    flex: 1,
-    padding: 20,
-    alignItems: 'center',
-  },
-  welcomeText: {
-    fontSize: 16,
-    color: '#000',
-    marginTop: 10,
-  },
-  titleText: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#000',
-    marginBottom: 20,
-  },
-  phoneInputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 5,
-    paddingHorizontal: 10,
-    paddingVertical: 8,
-    marginBottom: 10,
-    width: '100%',
-  },
-  countryCode: {
-    fontSize: 18,
-    marginRight: 10,
-  },
-  phoneInput: {
-    fontSize: 16,
-    flex: 1,
-  },
-  loginButton: {
-    backgroundColor: '#ddd',
-    paddingVertical: 15,
-    borderRadius: 5,
-    alignItems: 'center',
-    width: '100%',
-    marginBottom: 15,
-  },
-  loginButtonText: {
-    fontSize: 16,
-    color: '#000',
-  },
-  orText: {
-    fontSize: 14,
-    marginVertical: 10,
-    color: '#888',
-  },
-  socialButton: {
-    width: '100%',
-    marginBottom: 10,
-  },
-  languageSelector: {
-    marginTop: 20,
-  },
-  languageText: {
-    fontSize: 14,
-    color: '#888',
-  },
-});
-
-export default LoginScreen;
+export default SignIn;

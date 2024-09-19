@@ -16,8 +16,8 @@ const OnboardingItem: React.FC<OnboardingItemProps> = ({ item }) => {
   const { width } = useWindowDimensions();
 
   return (
-    <View style={{ width }} className="h-[85vh] px-16">
-      <View className="absolute top-10 left-0 right-0 justify-center items-center">
+    <View style={{ width }} className="px-16">
+      <View className="absolute top-[10%] left-0 right-0 justify-center items-center">
         <LinearGradient
           colors={[Colors.light.tint, Colors.dark.tint]}
           start={{ x: 0.5, y: 0 }}
@@ -29,15 +29,12 @@ const OnboardingItem: React.FC<OnboardingItemProps> = ({ item }) => {
           }}
         />
       </View>
-
-      
-
       <Image
         className="h-2/3 w-full"
         source={item.image}
         resizeMode="contain"
       />
-      <View className="h-1/3 flex justify-start items-center">
+      <View className="h-1/3 flex justify-center items-center">
         <Text className="text-xl font-bold mb-4">{item.title}</Text>
         <Text className="max-w-xs text-base text-center">
           {item.description}
