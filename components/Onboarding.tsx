@@ -64,22 +64,20 @@ export default function Onboarding() {
           scrollEventThrottle={32}
         />
       </View>
-      <View className=" flex-1">
-        <View className="h-1/3 justify-center">
-          <Paginator data={OnboardingContent} scrollX={scrollX} />
-        </View>
-        <View className="h-2/3  items-center justify-center flex">
-          {currentIndex == OnboardingContent.length - 1 && (
-            <TouchableOpacity
-              className="bg-blue-500 justify-center items-center py-3 px-8 rounded-full"
-              onPress={() => router.push("/sign-in")}
-            >
-              <Text className="text-white text-center text-lg font-bold">
-                Start
-              </Text>
-            </TouchableOpacity>
-          )}
-        </View>
+      <View className="h-[5vh] justify-center">
+        <Paginator data={OnboardingContent} scrollX={scrollX} />
+      </View>
+      <View className="h-[8vh] items-center justify-center flex">
+        {currentIndex == OnboardingContent.length - 1 && (
+          <TouchableOpacity
+            className="bg-blue-500 justify-center items-center py-3 px-8 rounded-full"
+            onPress={() => router.push('/sign-in' )}
+          >
+            <Text className="text-white text-center text-lg font-bold">
+              Start
+            </Text>
+          </TouchableOpacity>
+        )}
       </View>
     </SafeAreaView>
   );
