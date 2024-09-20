@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { View, FlatList, SafeAreaView, Text } from 'react-native';
+import { View, FlatList, SafeAreaView, Text, Platform, StatusBar } from 'react-native';
 import Product from '../../components/Product'; // Import the Product component you created earlier
 import { images } from "@/constants";
 
@@ -22,7 +22,9 @@ const ListItem = () => {
   );
 
   return (
-    <SafeAreaView className='flex-1 bg-slate-300'>
+    <SafeAreaView style={{
+      paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
+    }} className='flex-1 bg-slate-300'>
       <View className='flex-1 bg-slate-100'>
         <View className=' flex-1 flex-row'>
           <View className=' bg-slate-200 w-[70%]'></View>

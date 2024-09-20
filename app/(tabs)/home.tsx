@@ -5,6 +5,8 @@ import {
   Image,
   ScrollView,
   TouchableOpacity,
+  Platform,
+  StatusBar,
 } from "react-native";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -62,7 +64,12 @@ const Home = () => {
 
   return (
     <View className="flex-1 bg-white">
-      <SafeAreaView className="flex-1 ">
+      <SafeAreaView
+        className="flex-1 "
+        style={{
+          paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
+        }}
+      >
         {/* Header */}
         <View className="h-[15%] flex-row px-5">
           <View className="w-[70%] justify-center">
@@ -164,19 +171,15 @@ const Home = () => {
               </Text>
             </View>
             <View className=" justify-center items-end">
-              <Image className=" w-8 h-8 " source={icons.rightArrow} />
+              <TouchableOpacity onPress={() => router.push("/list-item")}>
+                <Image className=" w-8 h-8 " source={icons.rightArrow} />
+              </TouchableOpacity>
             </View>
           </View>
           <View>
             <Swiper
               cards={products}
-              onTapCard={
-                () => router.push("/list-item")
-              }
               renderCard={(product: any) => (
-
-                
-
                 <View className="bg-slate-200 rounded-3xl p-5 h-1/2  ">
                   <Text className="text-lg font-bold">{product.name}</Text>
                   <Text className="text-gray-500 mb-2">{product.name}</Text>
