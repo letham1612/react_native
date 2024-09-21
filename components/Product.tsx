@@ -13,11 +13,11 @@ type CardProps = {
 
 const Product: React.FC<CardProps> = ({ title, price, imageSource, category }) => {
   return (
-    <View className="p-5 static mx-4 my-2 bg-slate-100 h-[230px] rounded-3xl shadow-lg">
+    <View className="p-5 static mx-4 my-2 bg-slate-100 h-[219px] rounded-3xl">
       {/* Image */}
         <Image
             source={imageSource}
-            className=" w-52 h-52 rounded-2xl absolute left-[-10px] bottom-0 right-0 top-6"
+            className="w-48 h-48 rounded-2xl absolute left-[-10px] bottom-0 right-0 top-6"
             style={{ transform: [{ rotate: '20deg' }] }}
         />
 
