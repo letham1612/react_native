@@ -1,7 +1,10 @@
 import React, { useRef } from 'react';
-import { View, FlatList, SafeAreaView, Text, Platform, StatusBar } from 'react-native';
+import { View, FlatList, SafeAreaView, Text, Platform, StatusBar, Image } from 'react-native';
 import Product from '../../components/Product'; // Import the Product component you created earlier
-import { images } from "@/constants";
+import { images, icons } from "@/constants";
+import { Colors } from "@/constants/Colors";
+import { useTranslation } from "react-i18next";
+
 
 const data = [
   { title: 'Item 1', price: '7.00', imageSource: images.cafe1, category: 'Chips' },
@@ -9,9 +12,18 @@ const data = [
   { title: 'Item 3', price: '6.00', imageSource: images.cafe3, category: 'Chips' },
   { title: 'Item 4', price: '6.00', imageSource: images.cafe4, category: 'Chips' },
   { title: 'Item 5', price: '6.00', imageSource: images.cafe5, category: 'Chips' },
+  { title: 'Item 6', price: '7.00', imageSource: images.cafe1, category: 'Chips' },
+  { title: 'Item 7', price: '8.00', imageSource: images.cafe2, category: 'Chips' },
+  { title: 'Item 8', price: '10.00', imageSource: images.cafe3, category: 'Chips' },
+  { title: 'Item 9', price: '11.00', imageSource: images.cafe4, category: 'Chips' },
+  { title: 'Item 10', price: '12.00', imageSource: images.cafe5, category: 'Chips' },
 
   // Add more items...
 ];
+
+const middleIndex = Math.ceil(data.length / 2);
+const leftData = data.slice(0, middleIndex);
+const rightData = data.slice(middleIndex);
 
 const ListItem = () => {
   const leftListRef = useRef<FlatList>(null);
@@ -24,17 +36,32 @@ const ListItem = () => {
   return (
     <SafeAreaView style={{
       paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
-    }} className='flex-1 bg-slate-300'>
-      <View className='flex-1 bg-slate-100'>
+    }} className='flex-1 bg-white'>
+      <View className='flex-1 '>
+        {/* Header */}
         <View className=' flex-1 flex-row'>
-          <View className=' bg-slate-200 w-[70%]'></View>
-          <View className=' bg-amber-400  flex-1'></View>
+          <View className=' w-[70%] justify-center'>
+            <Text className="text-4xl items-center ml-7 ">Collections </Text>
+            <Text className="text-4xl font-bold ml-7">{data[0].category}</Text>
+          </View>
+
+          <View className='flex-1 justify-center items-center'>
+            <View className="border-2 py-5 px-1 rounded-full">
+              <Image
+                className="w-10 h-10"
+                source={icons.eye}
+                tintColor={Colors.dark.icon}
+              />
+            </View>
+          </View>
         </View>
-        <View className=' h-[85%] bg-neutral-600 flex-row'>
-          <View className='w-1/2 bg-indigo-200'>
+
+        {/* Body */}
+        <View className=' h-[85%] flex-row'>
+          <View className='w-1/2'>
           <FlatList
           ref={leftListRef}
-          data={data}
+          data={leftData}
           keyExtractor={(item, index) => index.toString()}
           renderItem={renderItem}
           showsVerticalScrollIndicator={false}
@@ -43,17 +70,28 @@ const ListItem = () => {
           inverted
           onEndReached={() => {
             if (leftListRef.current) {
-              leftListRef.current.scrollToOffset({ animated: true, offset: 0 });
+              leftListRef.current.scrollToEnd({ animated: true });
             }
           }}
-        />
+          />
           </View>
-          <View className='flex-1 bg-indigo-500'>
-            <View className='bg-red-700 h-[10%]'></View>
-            <View className='flex-1 bg-yellow-950'>
+
+          <View className='flex-1'>
+            <View className='h-[10%] items-center justify-end flex-row'>
+              <View className="py-2 px-2 rounded-full">
+                <Image
+                  className="w-10 h-10"
+                  source={icons.play}
+                  tintColor={Colors.dark.icon}
+                />
+              </View>
+            </View>
+
+
+            <View className='flex-1'>
               <FlatList
                   ref={rightListRef}
-                  data={data}
+                  data={rightData}
                   keyExtractor={(item, index) => index.toString()}
                   renderItem={renderItem}
                   showsVerticalScrollIndicator={false}
