@@ -5,8 +5,6 @@ import {
   Image,
   ScrollView,
   TouchableOpacity,
-  Platform,
-  StatusBar,
 } from "react-native";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -14,7 +12,6 @@ import { icons, images } from "@/constants";
 import { Colors } from "@/constants/Colors";
 import { Categories } from "@/constants/data";
 import Swiper from "react-native-deck-swiper";
-import { router } from "expo-router";
 
 type CategoryType = {
   id: number;
@@ -64,12 +61,7 @@ const Home = () => {
 
   return (
     <View className="flex-1 bg-white">
-      <SafeAreaView
-        className="flex-1 "
-        style={{
-          paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
-        }}
-      >
+      <SafeAreaView className="flex-1 ">
         {/* Header */}
         <View className="h-[15%] flex-row px-5">
           <View className="w-[70%] justify-center">
@@ -171,9 +163,7 @@ const Home = () => {
               </Text>
             </View>
             <View className=" justify-center items-end">
-              <TouchableOpacity onPress={() => router.push("/list-item")}>
-                <Image className=" w-8 h-8 " source={icons.rightArrow} />
-              </TouchableOpacity>
+              <Image className=" w-8 h-8 " source={icons.rightArrow} />
             </View>
           </View>
           <View>
