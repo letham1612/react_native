@@ -12,6 +12,7 @@ import { icons, images } from "@/constants";
 import { Colors } from "@/constants/Colors";
 import { Categories } from "@/constants/data";
 import Swiper from "react-native-deck-swiper";
+import { router } from "expo-router";
 
 type CategoryType = {
   id: number;
@@ -71,13 +72,12 @@ const Home = () => {
             </Text>
           </View>
           <View className=" w-[30%] justify-center items-center">
-            <View className="border-2 py-5 px-1 rounded-full">
+            <TouchableOpacity className="border-neutral-400 border-2 py-5 px-1 rounded-full">
               <Image
                 className="w-10 h-10"
-                source={icons.eye}
-                tintColor={Colors.dark.icon}
+                source={icons.menubar}
               />
-            </View>
+            </TouchableOpacity>
           </View>
         </View>
 
@@ -162,20 +162,18 @@ const Home = () => {
                 )}
               </Text>
             </View>
-            <View className=" justify-center items-end">
+            <TouchableOpacity className=" justify-center items-end"
+              onPress={() => router.push('/list-item')}
+            >
               <Image className=" w-8 h-8 " source={icons.rightArrow} />
-            </View>
+            </TouchableOpacity>
           </View>
           <View>
+            <TouchableOpacity onPress={() => router.push('/bookmark')}>
+            </TouchableOpacity>
             <Swiper
               cards={products}
-              onTapCard={
-                () => router.push("/list-item")
-              }
               renderCard={(product: any) => (
-
-                
-
                 <View className="bg-slate-200 rounded-3xl p-5 h-1/2  ">
                   <Text className="text-lg font-bold">{product.name}</Text>
                   <Text className="text-gray-500 mb-2">{product.name}</Text>
@@ -183,7 +181,7 @@ const Home = () => {
                   {/* Product Image */}
                   <Image
                     source={product.image}
-                    className="w-full h-32 mb-3"
+                    className="w-full h-80 mb-3"
                     resizeMode="contain"
                   />
 
@@ -192,7 +190,7 @@ const Home = () => {
                     <Text className="text-lg font-bold">{product.price}</Text>
                     <TouchableOpacity className="bg-black p-3 rounded-full">
                       <Image
-                        source={icons.play}
+                        source={icons.shoppingcard}
                         className="w-5 h-5"
                         tintColor="white"
                       />
@@ -215,7 +213,7 @@ const Home = () => {
       </SafeAreaView>
 
       {/* Footer Section */}
-      <View className="h-[12%] bg-black flex-row justify-between items-center rounded-tl-[50px] rounded-tr-[50px] px-5 py-3">
+      <TouchableOpacity className="h-[12%] bg-black flex-row justify-between items-center rounded-tl-[50px] rounded-tr-[50px] px-5 py-3">
         {/* Left side - Cart Information */}
         <View className="flex-row items-center w-2/5">
           <View className="w-[35px] h-[35px] rounded-full bg-yellow-400 justify-center items-center mr-5">
@@ -246,7 +244,7 @@ const Home = () => {
             </View>
           </ScrollView>
         </View>
-      </View>
+      </TouchableOpacity>
     </View>
   );
 };

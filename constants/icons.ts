@@ -11,6 +11,10 @@ import logout from "../assets/icons/logout.png";
 import eyeHide from "../assets/icons/eye-hide.png";
 import eye from "../assets/icons/eye.png";
 import play from "../assets/icons/play.png";
+import menubar from "../assets/icons/menu_bar.png"
+import shoppingcard from "../assets/icons/card.png"
+import back from "../assets/icons/back.png"
+import adjust from "../assets/icons/adjust.png"
 
 export default {
   play,
@@ -26,4 +30,8 @@ export default {
   logout,
   eyeHide,
   eye,
+  menubar,
+  shoppingcard,
+  back,
+  adjust
 };

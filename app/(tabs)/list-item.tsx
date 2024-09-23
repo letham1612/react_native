@@ -1,9 +1,10 @@
 import React, { useRef } from 'react';
-import { View, FlatList, SafeAreaView, Text, Platform, StatusBar, Image } from 'react-native';
+import { View, FlatList, SafeAreaView, Text, Platform, StatusBar, Image, TouchableOpacity } from 'react-native';
 import Product from '../../components/Product'; // Import the Product component you created earlier
 import { images, icons } from "@/constants";
 import { Colors } from "@/constants/Colors";
-import { useTranslation } from "react-i18next";
+import { router } from 'expo-router';
+
 
 
 const data = [
@@ -46,13 +47,15 @@ const ListItem = () => {
           </View>
 
           <View className='flex-1 justify-center items-center'>
-            <View className="border-2 py-5 px-1 rounded-full">
-              <Image
-                className="w-10 h-10"
-                source={icons.eye}
-                tintColor={Colors.dark.icon}
-              />
-            </View>
+            <View className="border-neutral-400 border-2 py-5 px-1 rounded-full">
+              <TouchableOpacity
+              onPress={() => router.push('/home')}>
+                <Image
+                  className="w-10 h-10"
+                  source={icons.back}
+                />
+              </TouchableOpacity>
+              </View>
           </View>
         </View>
 
@@ -78,13 +81,12 @@ const ListItem = () => {
 
           <View className='flex-1'>
             <View className='h-[10%] items-center justify-end flex-row'>
-              <View className="py-2 px-2 rounded-full">
+              <TouchableOpacity className="py-2 px-2 rounded-full ">
                 <Image
-                  className="w-10 h-10"
-                  source={icons.play}
-                  tintColor={Colors.dark.icon}
+                  className="w-10 h-10 mr-1"
+                  source={icons.adjust}
                 />
-              </View>
+              </TouchableOpacity>
             </View>
 
 
