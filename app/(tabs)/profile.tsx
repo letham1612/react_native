@@ -1,5 +1,5 @@
-import { View, Text,Image,StyleSheet, SafeAreaView,TouchableOpacity } from 'react-native'
-import React, {useState} from 'react'
+import { View, Text, Image, SafeAreaView, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
 
 const Profile = () => {
   const [quantity, setQuantity] = useState(3);
@@ -7,6 +7,7 @@ const Profile = () => {
   const incrementQuantity = () => {
     setQuantity(prevQuantity => prevQuantity + 1);
   };
+
   const decrementQuantity = () => {
     if (quantity > 1) {
       setQuantity(prevQuantity => prevQuantity - 1);
@@ -14,192 +15,53 @@ const Profile = () => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.title}>
-        {/* Header */}
-      <Text style={styles.productTitle}>Coconut</Text>
-      <Text style={styles.productTitle1}>Chips</Text>
-      <Text style={styles.productSubTitle}>Dang</Text>
+    <SafeAreaView className="flex-1 bg-gray-200 justify-center items-center px-5">
+      {/* Header */}
+      <View className="absolute top-12 left-5">
+        <Text className="text-3xl text-black">Coconut</Text>
+        <Text className="text-2xl font-bold -mt-2">Chips</Text>
+        <Text className="text-base text-gray-500 mb-5">Dang</Text>
       </View>
+      
       <View>
-       {/* Product Image */}
-      <Image
-      source={require('../../assets/images/coconut.png')}
-        style={styles.productImage}
-      />
+        {/* Product Image */}
+        <Image
+          source={require('../../assets/images/coconut.png')}
+          className="w-72 h-72 mb-[-50] self-center"
+        />
 
         {/* Product Info */}
-        <View style={styles.productInfo}>
-        <Text style={styles.productDescription}>Pure{'\n'}Coconut</Text>
-        <Text style={styles.percentage}>100%</Text>
+        <View className="flex-row justify-between items-center w-2/5 mt-4 mb-5 self-center border-2 border-gray-100 rounded-xl p-3 h-[70] text-center bg-green-50">
+          <Text className="text-sm text-gray-500 ml-1">Pure{'\n'}Coconut</Text>
+          <Text className="text-lg font-bold text-black mr-[-2]">100%</Text>
         </View>
 
-        {/*Quantity Section */}
-        <View style={styles.quantitySection}>
-          <TouchableOpacity onPress={decrementQuantity} style={styles.quantityButton}>
-           <Text style={styles.quantityButtonText}>-</Text> 
+        {/* Quantity Section */}
+        <View className="flex-row items-center mb-5 self-center">
+          <TouchableOpacity onPress={decrementQuantity} className="bg-white rounded-full w-10 h-10 justify-center items-center mx-10">
+            <Text className="text-2xl text-black">-</Text>
           </TouchableOpacity>
-          <Text style={styles.quantityText}>{quantity}</Text>
-        <TouchableOpacity onPress={incrementQuantity} style={styles.quantityButton}>
-          <Text style={styles.quantityButtonText}>+</Text>
+          <Text className="text-4xl font-bold">{quantity}</Text>
+          <TouchableOpacity onPress={incrementQuantity} className="bg-white rounded-full w-10 h-10 justify-center items-center mx-10">
+            <Text className="text-2xl text-black">+</Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* Price */}
+        <Text className="text-xl font-bold text-black mb-5 border-2 border-yellow-200 rounded-full p-2 text-center bg-yellow-200 w-30 self-center">
+          $6.00
+        </Text>
+
+        {/* Add to Cart Button */}
+        <TouchableOpacity className="bg-white rounded-full flex-row items-center justify-center w-[300] h-[80] self-center mt-5 mb-[-80]">
+          <Text className="text-lg font-bold text-black mr-16 ml-5">Add To Cart</Text>
+          <View className="bg-yellow-200 rounded-full w-[70] h-[60] justify-center items-center">
+            <Text className="text-2xl">🛒</Text>
+          </View>
         </TouchableOpacity>
-        </View>
-
-          {/* Price */}
-      <Text style={styles.price}>$06.00</Text>
-
-       {/* Add to Cart Button */}
-      <TouchableOpacity style={styles.addToCartButton}>
-        <Text style={styles.addToCartText}>Add To Cart</Text>
-        <View style={styles.cartIconContainer}>
-          <Text style={styles.cartIcon}>🛒</Text>
-        </View>
-      </TouchableOpacity>
       </View>
-    
     </SafeAreaView>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flexDirection:'row',
-    flex: 1,
-    backgroundColor: '#F1F1F1',
-    padding: 20,
-    position: 'relative',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  title:{
-   position:'absolute',
-   top:0,
-   left:0,
-   marginLeft:20,
-   marginTop:50,
-   
-  },
-  productTitle: {
-    fontSize: 36,
-    color: '#000',
-  },
-  productTitle1:{
-    fontWeight:'bold',
-    fontSize:30,
-    marginTop:-10,
-  },
-  productSubTitle: {
-    fontSize: 16,
-    color: '#8E8E8E',
-    marginBottom: 20,
-  },
-  productImage: {
-    width: 300,
-    height: 300,
-    marginBottom: 20,
-    alignSelf: 'center',
-  },
-  productInfo:{
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    width: '60%',
-    marginTop:-50, 
-    marginBottom:20,
-    alignSelf: 'center',
-    color: '#000000',
-    borderColor:'#FAFAFA',
-    borderWidth: 2,
-    borderRadius: 10,
-    padding: 10,
-    height:70,
-    textAlign: 'center',
-    backgroundColor: '#F2FAEB',
-  },
-  productDescription: {
-    fontSize: 16,
-    color: '#8E8E8E',
-    marginLeft:15,
-    
-  },
-  percentage: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#000',
-    marginRight:15,
-  },
-  quantitySection: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 20,
-    alignSelf: 'center',
-  },
-  quantityButton: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 20,
-    width: 40,
-    height: 40,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginHorizontal: 40,
-  },
-  quantityButtonText: {
-    fontSize: 24,
-    color: '#000',
-    textAlign: 'center',
-    
-  },
-  quantityText: {
-    fontSize: 40,
-    fontWeight: 'bold',
-  },
-  price: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#000000',
-    marginBottom: -20,
-    borderColor:'#FFEC89',
-    borderWidth: 2,
-    borderRadius: 50,
-    padding: 5,
-    textAlign: 'center',
-    backgroundColor: '#FFEC89',
-    width:120,
-    alignSelf: 'center',
-    paddingVertical: 5, // Giảm khoảng cách trên dưới 
-    paddingHorizontal: 5, // Giảm khoảng cách hai bên 
-  },
-  addToCartButton: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 50,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom:-40,
-    width:300,
-    height:80,
-    bottom:-70,
-    paddingBottom:-50,
-  },
-  addToCartText: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#000',
-    marginRight: 100,
-    marginLeft:20,
-    
-  },
-  cartIconContainer: {
-    backgroundColor: '#FFEC89',
-    borderRadius: 25,
-    width: 60,
-    height: 50,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  cartIcon: {
-    fontSize: 24,
-  },
-});
-
-export default Profile
+export default Profile;
