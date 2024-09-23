@@ -72,7 +72,7 @@ export default function Onboarding() {
           <TouchableOpacity
             className="bg-blue-500 justify-center items-center py-3 px-8 rounded-full"
 
-            onPress={() => router.push('/home' )}
+            onPress={() => router.push('/profile' )}
             >
       
             <Text className="text-white text-center text-lg font-bold">
