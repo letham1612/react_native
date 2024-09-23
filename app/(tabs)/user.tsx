@@ -1,388 +1,202 @@
-import React, { useEffect, useState, useRef } from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-  Modal,
-  FlatList,
-  KeyboardAvoidingView,
-  Platform,
-} from 'react-native';
-import axios from 'axios';
-import { useRouter } from 'expo-router';
+import React, { useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, Image, ScrollView, Modal, KeyboardAvoidingView, Platform, PermissionsAndroid } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
-interface FormData {
-  name: string;
-  phone: string;
-  gender: string;
-  idNumber: string;
-  dob: string;
-  email: string;
-  province: string;
-  provinceId: string;
-  district: string;
-  districtId: string;
-  ward: string;
-  wardId: string;
-  address: string;
-}
-
-interface Location {
+interface Option {
   id: number;
-  full_name: string;
+  name: string;
 }
 
-const UserInfo: React.FC = () => {
-  const router = useRouter();
-  const [formData, setFormData] = useState<FormData>({
-    name: '',
-    phone: '',
+const UserProfile = () => {
+  const [formData, setFormData] = useState({
+    fullName: '',
+    dob: new Date(),
     gender: '',
-    idNumber: '',
-    dob: '',
-    email: '',
-    province: '',
-    provinceId: '',
-    district: '',
-    districtId: '',
-    ward: '',
-    wardId: '',
-    address: '',
+    email: '', 
   });
+  const [avatar, setAvatar] = useState<string | null>(null);
+  const [emailError, setEmailError] = useState<string | null>(null);
+  const [dobError, setDobError] = useState<string | null>(null);
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [modals, setModals] = useState({ gender: false });
 
-  const [modals, setModals] = useState<{ [key: string]: boolean }>({
-    gender: false,
-    province: false,
-    district: false,
-    ward: false,
-  });
-  const [provinces, setProvinces] = useState<Location[]>([]);
-  const [districts, setDistricts] = useState<Location[]>([]);
-  const [wards, setWards] = useState<Location[]>([]);
+  const requestCameraPermission = async () => {
+    if (Platform.OS === 'android') {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+        {
+          title: "Permission to access photos",
+          message: "This app needs access to your photos.",
+          buttonNeutral: "Ask Me Later",
+          buttonNegative: "Cancel",
+          buttonPositive: "OK",
+        }
+      );
+      return granted === PermissionsAndroid.RESULTS.GRANTED;
+    }
+    return true;
+  };
 
-  const scrollViewRef = useRef<ScrollView | null>(null);
-
-  const handleFocus = () => {
-    if (scrollViewRef.current) {
-      scrollViewRef.current.scrollToEnd({ animated: true });
+  const handleChoosePhoto = async () => {
+    const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (permissionResult.granted === false) {
+      alert("Permission to access camera roll is required!");
+      return;
+    }
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+  
+    if (!result.canceled && result.assets && result.assets.length > 0) {
+      setAvatar(result.assets[0].uri);
     }
   };
 
-  const fetchProvinces = async () => {
-    try {
-      const response = await axios.get('https://esgoo.net/api-tinhthanh/1/0.htm');
-      const provincesData = response.data.data.map((item: any) => ({
-        id: item.id,
-        full_name: item.name,
-      }));
-      setProvinces(provincesData);
-      console.log('Fetched provinces:', provincesData);
-    } catch (error) {
-      console.error('Error fetching provinces:', error);
-    }
+  const validateEmail = (email: string) => {
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailPattern.test(email);
   };
 
-  const fetchDistricts = async (provinceId: string) => {
-    if (provinceId) {
-      try {
-        const response = await axios.get(`https://esgoo.net/api-tinhthanh/2/${provinceId}.htm`);
-        const districtsData = response.data.data.map((item: any) => ({
-          id: item.id,
-          full_name: item.name,
-        }));
-        setDistricts(districtsData);
-        console.log('Fetched districts:', districtsData);
-      } catch (error) {
-        console.error('Error fetching districts:', error);
-      }
-    } else {
-      console.error('No province ID provided.');
-    }
+  const validateDob = () => {
+    return formData.dob instanceof Date && !isNaN(formData.dob.getTime());
   };
 
-  const fetchWards = async (districtId: string) => {
-    if (districtId) {
-      try {
-        const response = await axios.get(`https://esgoo.net/api-tinhthanh/3/${districtId}.htm`);
-        const wardsData = response.data.data.map((item: any) => ({
-          id: item.id,
-          full_name: item.name,
-        }));
-        setWards(wardsData);
-        console.log('Fetched wards:', wardsData);
-      } catch (error) {
-        console.error('Error fetching wards:', error);
-      }
+  const handleUpdateInfo = () => {
+    setEmailError(null);
+    setDobError(null);
+
+    if (!validateEmail(formData.email)) {
+      setEmailError("Vui lòng nhập địa chỉ email hợp lệ.");
+      return;
     }
+
+    if (!validateDob()) {
+      setDobError("Vui lòng chọn ngày sinh.");
+      return;
+    }
+
+    console.log("Cập nhật thông tin:", formData, avatar);
   };
 
-  useEffect(() => {
-    fetchProvinces();
-  }, []);
-
-  useEffect(() => {
-    if (formData.provinceId) {
-      fetchDistricts(formData.provinceId);
-    }
-  }, [formData.provinceId]);
-
-  useEffect(() => {
-    if (formData.districtId) {
-      fetchWards(formData.districtId);
-    }
-  }, [formData.districtId]);
-
-  const handleSelect = (type: string, fullName: string, code: string) => {
-    if (type === 'province') {
-      setFormData((prev) => ({
-        ...prev,
-        province: fullName, // Hiển thị full_name cho tỉnh
-        provinceId: code,   // Lưu id để gọi API lấy quận/huyện
-        district: '',       // Reset quận và xã khi chọn lại tỉnh
-        ward: '',
-      }));
-      setDistricts([]);
-      setWards([]);
-      fetchDistricts(code); // Gọi API lấy quận/huyện bằng id
-    } else if (type === 'district') {
-      setFormData((prev) => ({
-        ...prev,
-        district: fullName,  // Hiển thị full_name cho quận/huyện
-        districtId: code,    // Lưu id để gọi API lấy xã/phường
-        ward: '',            // Reset xã khi chọn lại quận/huyện
-      }));
-      setWards([]);
-      fetchWards(code); // Gọi API lấy xã/phường bằng id
-    } else if (type === 'ward') {
-      setFormData((prev) => ({
-        ...prev,
-        ward: fullName,  // Hiển thị full_name cho xã/phường
-        wardId: code,    // Lưu id nếu cần
-      }));
-    }
-
-    setModals((prev) => ({ ...prev, [type]: false }));
+  const handleDeleteAccount = () => {
+    console.log("Xóa tài khoản");
   };
 
-  const renderModal = (type: string, items: Location[]) => (
-    <Modal visible={modals[type]} animationType="slide">
-      <View style={styles.modalContainer}>
-        <FlatList
-          data={items}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item }) => (
-            <TouchableOpacity onPress={() => handleSelect(type, item.full_name, item.id.toString())}>
-              <Text style={styles.modalItem}>{item.full_name}</Text>
+  const onChangeDob = (event: any, selectedDate: Date | undefined) => {
+    const currentDate = selectedDate || formData.dob;
+    setShowDatePicker(false);
+    setFormData({ ...formData, dob: currentDate });
+  };
+
+  const renderModal = (type: keyof typeof modals, options: Option[], onSelect: (value: string) => void) => (
+    <Modal
+      transparent={true}
+      visible={modals[type]}
+      onRequestClose={() => setModals({ ...modals, [type]: false })}
+    >
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.5)' }}>
+        <View style={{ width: 300, backgroundColor: 'white', borderRadius: 10, padding: 20 }}>
+          {options.map((option) => (
+            <TouchableOpacity key={option.id} onPress={() => {
+              onSelect(option.name);
+              setModals({ ...modals, [type]: false });
+            }}>
+              <Text style={{ padding: 10 }}>{option.name}</Text>
             </TouchableOpacity>
-          )}
-        />
-        <TouchableOpacity onPress={() => setModals((prev) => ({ ...prev, [type]: false }))}>
-          <Text style={styles.closeButton}>Đóng</Text>
-        </TouchableOpacity>
+          ))}
+        </View>
       </View>
     </Modal>
   );
 
   return (
-    <KeyboardAvoidingView
-      style={{ flex: 1 }}
+    <KeyboardAvoidingView 
+      style={{ flex: 1 }} 
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 0}
     >
-      <ScrollView
-        ref={scrollViewRef}
-        style={styles.container}
-        keyboardShouldPersistTaps="handled"
-      >
-        <View style={styles.headerContainer}>
-          <TouchableOpacity onPress={() => router.push('/home')}>
-            <Text style={styles.backButton}>{'<'}</Text>
-          </TouchableOpacity>
-          <Text style={styles.header}>Thông tin cá nhân</Text>
-        </View>
+      <ScrollView style={{ flex: 1, backgroundColor: '#F3F4F6', padding: 20 }}>
+        <TouchableOpacity onPress={handleChoosePhoto} style={{ marginBottom: 20, alignSelf: 'center' }}>
+          {avatar ? (
+            <Image source={{ uri: avatar }} style={{ width: 160, height: 160, borderRadius: 80 }} />
+          ) : (
+            <View style={{ width: 160, height: 160, borderRadius: 80, backgroundColor: '#E5E7EB', justifyContent: 'center', alignItems: 'center' }}>
+              <Text style={{ fontSize: 24, color: '#4B5563' }}>Chọn ảnh</Text>
+            </View>
+          )}
+        </TouchableOpacity>
 
-        {/* Các trường thông tin khác */}
-        <View>
-          <Text style={styles.label}>Họ và tên</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Nhập họ và tên"
-            value={formData.name}
-            onChangeText={(text) => setFormData({ ...formData, name: text })}
-          />
-        </View>
+        <Text style={{ fontSize: 18, marginBottom: 8 }}>Họ và Tên</Text>
+        <TextInput
+          value={formData.fullName}
+          onChangeText={(text) => setFormData({ ...formData, fullName: text })}
+          placeholder="Nhập họ và tên"
+          style={{ borderWidth: 1, borderColor: '#D1D5DB', borderRadius: 4, padding: 8, marginBottom: 20 }}
+        />
 
-        <View>
-          <Text style={styles.label}>Số điện thoại</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Nhập số điện thoại"
-            keyboardType="phone-pad"
-            value={formData.phone}
-            onChangeText={(text) => setFormData({ ...formData, phone: text })}
-          />
-        </View>
+        <Text style={{ fontSize: 18, marginBottom: 8 }}>Email</Text>
+        <TextInput
+          value={formData.email}
+          onChangeText={(text) => setFormData({ ...formData, email: text })}
+          placeholder="Nhập email"
+          style={{ borderWidth: 1, borderColor: '#D1D5DB', borderRadius: 4, padding: 8, marginBottom: 20 }}
+          keyboardType="email-address"
+        />
+        
+        {emailError && (
+          <Text style={{ color: 'red', marginBottom: 8 }}>{emailError}</Text>
+        )}
 
         <View>
-          <Text style={styles.label}>Giới tính</Text>
-          <TouchableOpacity style={styles.input} onPress={() => setModals({ ...modals, gender: true })}>
+          <Text style={{ fontSize: 18, marginBottom: 8 }}>Giới tính</Text>
+          <TouchableOpacity style={{ borderWidth: 1, borderColor: '#D1D5DB', borderRadius: 4, padding: 8, marginBottom: 20 }} onPress={() => setModals({ ...modals, gender: true })}>
             <Text>{formData.gender || 'Chọn giới tính'}</Text>
           </TouchableOpacity>
           {renderModal('gender', [
-            { id: 1, full_name: 'Nam' },
-            { id: 2, full_name: 'Nữ' },
-            { id: 3, full_name: 'Khác' },
-          ])}
+            { id: 1, name: 'Nam' },
+            { id: 2, name: 'Nữ' },
+            { id: 3, name: 'Khác' },
+          ], (value) => setFormData({ ...formData, gender: value }))}
+
         </View>
 
         <View>
-          <Text style={styles.label}>Số CMND/CCCD</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Nhập số CMND/CCCD"
-            value={formData.idNumber}
-            onChangeText={(text) => setFormData({ ...formData, idNumber: text })}
-          />
-        </View>
-
-        <View>
-          <Text style={styles.label}>Ngày sinh</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Ngày sinh (YYYY-MM-DD)"
-            value={formData.dob}
-            onChangeText={(text) => setFormData({ ...formData, dob: text })}
-          />
-        </View>
-
-        <View>
-          <Text style={styles.label}>Email</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Nhập email"
-            keyboardType="email-address"
-            value={formData.email}
-            onChangeText={(text) => setFormData({ ...formData, email: text })}
-          />
-        </View>
-
-        {/* Tỉnh/thành phố */}
-        <View>
-          <Text style={styles.label}>Tỉnh/Thành phố</Text>
-          <TouchableOpacity style={styles.input} onPress={() => setModals({ ...modals, province: true })}>
-            <Text>{formData.province || 'Chọn tỉnh/thành phố'}</Text>
+          <Text style={{ fontSize: 18, marginBottom: 8 }}>Ngày sinh</Text>
+          <TouchableOpacity onPress={() => setShowDatePicker(true)} style={{ borderWidth: 1, borderColor: '#D1D5DB', borderRadius: 4, padding: 8, marginBottom: 20 }}>
+            <Text>{formData.dob.toLocaleDateString() || 'Chọn ngày sinh'}</Text>
           </TouchableOpacity>
-          {renderModal('province', provinces)}
+          {showDatePicker && (
+            <DateTimePicker
+              value={formData.dob}
+              mode="date"
+              display="default"
+              onChange={onChangeDob}
+            />
+          )}
+          {dobError && (
+            <Text style={{ color: 'red', marginBottom: 8 }}>{dobError}</Text>
+          )}
         </View>
 
-        {/* Quận/Huyện */}
-        <View>
-          <Text style={styles.label}>Quận/Huyện</Text>
-          <TouchableOpacity style={styles.input} onPress={() => setModals({ ...modals, district: true })}>
-            <Text>{formData.district || 'Chọn quận/huyện'}</Text>
-          </TouchableOpacity>
-          {renderModal('district', districts)}
-        </View>
+        <TouchableOpacity
+          onPress={handleUpdateInfo}
+          style={{ backgroundColor: '#4CAF50', padding: 10, borderRadius: 4, alignItems: 'center', marginTop: 20 }}
+        >
+          <Text style={{ color: 'white', fontSize: 18 }}>Cập nhật thông tin</Text>
+        </TouchableOpacity>
 
-        {/* Xã/Phường */}
-        <View>
-          <Text style={styles.label}>Xã/Phường</Text>
-          <TouchableOpacity style={styles.input} onPress={() => setModals({ ...modals, ward: true })}>
-            <Text>{formData.ward || 'Chọn xã/phường'}</Text>
-          </TouchableOpacity>
-          {renderModal('ward', wards)}
-        </View>
-
-         <View>
-          <Text style={styles.label}>Địa chỉ</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Nhập địa chỉ"
-            onFocus={handleFocus}
-            value={formData.address}
-            onChangeText={(text) => setFormData({ ...formData, address: text })}
-          />
-        </View>
-
-        <View style={styles.footer}>
-          <TouchableOpacity style={styles.saveButton} onPress={() => console.log('Saving data...')}>
-            <Text style={styles.saveButtonText}>Lưu thông tin</Text>
-          </TouchableOpacity>
-        </View>
+        <TouchableOpacity
+          onPress={handleDeleteAccount}
+          style={{ backgroundColor: '#F44336', padding: 10, borderRadius: 4, alignItems: 'center', marginTop: 10 }}
+        >
+          <Text style={{ color: 'white', fontSize: 18 }}>Xóa tài khoản</Text>
+        </TouchableOpacity>
       </ScrollView>
     </KeyboardAvoidingView>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingHorizontal: 16,
-  },
-  headerContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 16,
-  },
-  backButton: {
-    fontSize: 24,
-    marginRight: 8,
-    color:'#006E3C'
-  },
-  header: {
-    fontSize: 24,
-    color:'#006E3C'
-  },
-  label: {
-    marginTop: 16,
-    fontSize: 16,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 4,
-    padding: 12,
-    marginTop: 8,
-  },
-  modalContainer: {
-    flex: 1,
-    //justifyContent: 'center',
-    //alignItems: 'center',
-    padding: 16,
-    marginTop:30,
-  },
-  modalItem: {
-    fontSize: 18,
-    padding: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
-  },
-  closeButton: {
-    fontSize: 18,
-    color: 'blue',
-    marginTop: 16,
-  },
-  footer: {
-    marginTop: 32,
-    justifyContent: 'center',
-    flexDirection: 'row',
-  },
-  saveButton: {
-    backgroundColor: '#006E3C',
-    paddingVertical: 16,
-    borderRadius: 4,
-    alignItems: 'center',
-    width: 150,
-  },
-  saveButtonText: {
-    color: 'white',
-    textAlign: 'center',
-    fontSize: 18,
-  },
-});
-
-export default UserInfo;
-
+export default UserProfile;
